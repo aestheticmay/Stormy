@@ -7,22 +7,28 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
+final class ViewController: UITableViewController {
     
-    // MARK: - Public Properties
+    // MARK: - Private Properties
     
-    var pictures = [String]()
+    private var pictures = [String]()
     
     // MARK: - Life-Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavigationController()
         configureFileManager()
     }
     
-    // MARK: - Public Methods
+    // MARK: - Private Methods
     
-    func configureFileManager() {
+    private func configureNavigationController() {
+        title = "Storm pictures"
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    private func configureFileManager() {
         let fileManager = FileManager.default //  This is a data type that lets us work with the filesystem
         let path = Bundle.main.resourcePath! // A directory containing our compiled program and all our assets
         do {
@@ -34,8 +40,9 @@ class ViewController: UITableViewController {
                 }
             }
         }
-        print(pictures)
     }
+    
+    // MARK: - Configure tableView
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return pictures.count
@@ -45,6 +52,13 @@ class ViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Picture", for: indexPath)
         cell.textLabel?.text = pictures[indexPath.row]
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let viewController = storyboard?.instantiateViewController(withIdentifier: "Details") as? DetailsViewController {
+            viewController.selectedImage = pictures[indexPath.row] // DetailsViewController gives us an image
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }
 
