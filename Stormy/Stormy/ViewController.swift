@@ -41,7 +41,7 @@ final class ViewController: UITableViewController {
             }
         }
     }
-    
+
     // MARK: - Configure tableView
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
